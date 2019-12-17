@@ -72,12 +72,12 @@ int read_file(int fd, char **buffer, int *size, char **save)
         free(*buffer);
         return (0); }
     (*buffer)[*size] = '\0';
-    while (i++ < *size) {
+    while (i < *size) {
         if ((*buffer)[i] == '\n') {
             (*buffer)[i] = '\0';
             my_strcat(save, &(*buffer)[i + 1], 0);
             return (2); }
-    }
+        i += 1; }
     return (1);
 }
 
