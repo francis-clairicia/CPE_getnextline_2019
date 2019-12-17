@@ -91,7 +91,7 @@ char *get_next_line(int fd)
     int read_status = 1;
     int buffer_size;
 
-    if (my_strcat(&line, save, '\n') == 2) {
+    if (my_strlen(save) > 0 && my_strcat(&line, save, '\n') == 2) {
         my_strcat(&new_save, &save[my_strlen(line) + 1], 0);
         free(save);
         save = new_save;

@@ -12,7 +12,36 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-int fd = -1;
+int my_realloc(char **str, int to_add);
+
+int my_strlen(char const *str);
+
+static void my_strcpy(char *dest, char const *src)
+{
+    int i = 0;
+
+    while (src[i] != '\0') {
+        dest[i] = src[i];
+        i += 1;
+    }
+    dest[i] = '\0';
+}
+
+Test(my_realloc, allocate_extra_memory)
+{
+    char *str = malloc(sizeof(char) * 6);
+
+    cr_assert_not_null(str);
+    my_strcpy(str, "Hello");
+    cr_assert_eq(my_realloc(&str, 3), 1);
+    cr_expect_str_eq(str, "Hello");
+    cr_expect_eq(str[6], '\0');
+    cr_expect_eq(str[7], '\0');
+    cr_expect_eq(str[8], '\0');
+    cr_expect_eq(str[9], '\0');
+    cr_expect_eq(my_strlen(str), 5);
+    free(str);
+}
 
 Test(get_next_line, read_line_by_line)
 {
