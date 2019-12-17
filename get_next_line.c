@@ -58,28 +58,26 @@ int my_strcat(char **dest, char const *src, char limit)
     return ((src[i] == limit) ? 2 : 1);
 }
 
-int read_file(int fd, char **buffer, char **save)
+int read_file(int fd, char **buffer, int *size, char **save)
 {
     int i = 0;
-    int size;
 
     free(*save);
     *save = NULL;
     *buffer = (READ_SIZE > 0) ? malloc(sizeof(char) * (READ_SIZE + 1)) : NULL;
     if (*buffer == NULL)
         return (0);
-    size = read(fd, *buffer, READ_SIZE);
-    if (size <= 0) {
+    *size = read(fd, *buffer, READ_SIZE);
+    if (*size <= 0) {
         free(*buffer);
-        *buffer = NULL;
         return (0); }
-    (*buffer)[size] = '\0';
-    while (i < size) {
+    (*buffer)[*size] = '\0';
+    while (i++ < *size) {
         if ((*buffer)[i] == '\n') {
             (*buffer)[i] = '\0';
             my_strcat(save, &(*buffer)[i + 1], 0);
             return (2); }
-        i += 1; }
+    }
     return (1);
 }
 
@@ -90,15 +88,15 @@ char *get_next_line(int fd)
     static char *save = NULL;
     char *new_save = NULL;
     int read_status = 1;
+    int buffer_size;
 
     if (my_strcat(&line, save, '\n') == 2) {
         my_strcat(&new_save, &save[my_strlen(line) + 1], 0);
         free(save);
         save = new_save;
-        return (line);
-    } while (read_status == 1) {
-        read_status = read_file(fd, &buffer, &save);
-        if (buffer == NULL)
+    } else while (read_status == 1) {
+        read_status = read_file(fd, &buffer, &buffer_size, &save);
+        if (buffer_size <= 0)
             return (line);
         if (!my_strcat(&line, buffer, 0))
             return (NULL);
