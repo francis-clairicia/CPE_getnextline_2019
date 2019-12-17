@@ -8,8 +8,8 @@
 #ifndef HEADER_GET_NEXT_LINE
 #define HEADER_GET_NEXT_LINE
 
-#define READ_SIZE 2
+#define READ_SIZE 100
 
-char *get_next_line (int fd);
+char *get_next_line(int fd);
 
 #endif
