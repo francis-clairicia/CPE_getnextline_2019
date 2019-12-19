@@ -11,5 +11,9 @@
 #define READ_SIZE 10
 
 char *get_next_line(int fd);
+int my_strlen(char const *str);
+int my_realloc(char **str, int to_add);
+int read_file(int fd, char *buffer, char **save);
+int my_strcat(char **dest, char const *src, char limit);
 
 #endif
