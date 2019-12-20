@@ -23,30 +23,27 @@ int my_realloc(char **str, int to_add)
     int str_size = my_strlen(*str);
     char *new_str = malloc(sizeof(char) * (str_size + to_add + 1));
     int i = 0;
-    int output = 1;
 
-    if (new_str == NULL)
-       output = 0;
-    else while (i < str_size + to_add + 1) {
-        if (i < str_size)
-            new_str[i] = (*str)[i];
-        else
-            new_str[i] = '\0';
+    if (new_str == NULL) {
+        free(*str);
+        return (0);
+    }
+    while (i < str_size + to_add + 1) {
+        new_str[i] = (i < str_size) ? (*str)[i] : '\0';
         i += 1;
     }
     free(*str);
     *str = new_str;
-    return (output);
+    return (1);
 }
 
 int my_strcat(char **dest, char const *src, char limit)
 {
     int i = 0;
-    int first;
+    int first = my_strlen(*dest);
 
     if (src == NULL || !my_realloc(dest, my_strlen(src)))
         return (0);
-    first = my_strlen(*dest);
     while (src[i] != '\0' && src[i] != limit) {
         (*dest)[first + i] = src[i];
         i += 1;
@@ -87,7 +84,9 @@ char *get_next_line(int fd)
         my_strcat(&new_save, &save[my_strlen(line) + 1], 0);
         free(save);
         save = new_save;
-    } else while (READ_SIZE > 0 && read_status == 1) {
+        return (line);
+    }
+    while (READ_SIZE > 0 && read_status == 1) {
         read_status = read_file(fd, buffer, &save);
         if (read_status != 0 && !my_strcat(&line, buffer, 0))
             return (NULL);
