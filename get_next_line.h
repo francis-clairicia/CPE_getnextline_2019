@@ -8,7 +8,9 @@
 #ifndef HEADER_GET_NEXT_LINE
 #define HEADER_GET_NEXT_LINE
 
+#ifndef READ_SIZE
 #define READ_SIZE 10
+#endif
 
 char *get_next_line(int fd);
 int my_strlen(char const *str);
