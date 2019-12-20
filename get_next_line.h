@@ -13,7 +13,7 @@
 #endif
 
 char *get_next_line(int fd);
-int my_strlen(char const *str);
+int my_strlen_with_limit(char const *str, char limit);
 int my_realloc(char **str, int to_add);
 int read_file(int fd, char *buffer, char **save);
 int my_strcat(char **dest, char const *src, char limit);

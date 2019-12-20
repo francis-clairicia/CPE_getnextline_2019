@@ -12,6 +12,15 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
+static int my_strlen(char const *str)
+{
+    int count = 0;
+
+    while (str != NULL && str[count] != '\0')
+        count += 1;
+    return (count);
+}
+
 static char *my_strdup(char const *src)
 {
     char *dest = malloc(sizeof(char) * (my_strlen(src) + 1));
@@ -27,9 +36,10 @@ static char *my_strdup(char const *src)
     return (dest);
 }
 
-Test(my_strlen, find_the_length_of_a_string)
+Test(my_strlen_with_limit, find_the_length_of_a_string)
 {
-    cr_assert_eq(my_strlen("Hello"), 5);
+    cr_assert_eq(my_strlen_with_limit("Hello", 0), 5);
+    cr_assert_eq(my_strlen_with_limit("Hello", 'l'), 2);
     cr_assert_eq(my_strlen(""), 0);
     cr_assert_eq(my_strlen(NULL), 0);
 }
@@ -55,6 +65,7 @@ Test(my_strcat, concatenate_two_strings)
 
     cr_assert_eq(my_strcat(&str, "World", 0), 1);
     cr_expect_str_eq(str, "HelloWorld");
+    cr_expect_eq(my_strcat(&str, "", 0), 0);
     cr_expect_eq(my_strcat(&str, NULL, 0), 0);
     free(str);
 }
