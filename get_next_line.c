@@ -23,18 +23,19 @@ int my_realloc(char **str, int to_add)
     int str_size = my_strlen_with_limit(*str, 0);
     char *new_str = malloc(sizeof(char) * (str_size + to_add + 1));
     int i = 0;
+    int output = 1;
 
     if (new_str == NULL) {
-        free(*str);
-        return (0);
-    }
-    while (i < str_size + to_add + 1) {
-        new_str[i] = (i < str_size) ? (*str)[i] : '\0';
-        i += 1;
+        output = 0;
+    } else {
+        while (i < str_size + to_add + 1) {
+            new_str[i] = (i < str_size) ? (*str)[i] : '\0';
+            i += 1;
+        }
     }
     free(*str);
     *str = new_str;
-    return (1);
+    return (output);
 }
 
 int my_strcat(char **dest, char const *src, char limit)
@@ -74,7 +75,7 @@ int read_file(int fd, char *buffer, char **save)
 
 char *get_next_line(int fd)
 {
-    char buffer[abs((int)READ_SIZE) + 1];
+    char *buffer;
     char *line = NULL;
     static char *save = NULL;
     char *new_save = NULL;
@@ -86,10 +87,12 @@ char *get_next_line(int fd)
         save = new_save;
         return (line);
     }
+    buffer = malloc(sizeof(char) * (abs((int)READ_SIZE) + 1));
     while (READ_SIZE > 0 && read_status == 1) {
         read_status = read_file(fd, buffer, &save);
         if (read_status != 0 && !my_strcat(&line, buffer, '\n'))
-            return (NULL);
+            break;
     }
+    free(buffer);
     return (line);
 }
