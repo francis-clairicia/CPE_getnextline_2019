@@ -88,7 +88,7 @@ char *get_next_line(int fd)
         return (line);
     }
     buffer = malloc(sizeof(char) * (abs((int)READ_SIZE) + 1));
-    while (READ_SIZE > 0 && read_status == 1) {
+    while (fd >= 0 && READ_SIZE > 0 && read_status == 1) {
         read_status = read_file(fd, buffer, &save);
         if (read_status != 0 && !my_strcat(&line, buffer, '\n'))
             break;
