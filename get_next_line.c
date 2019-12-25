@@ -56,10 +56,12 @@ int my_strcat(char **dest, char const *src, char limit)
 int read_file(int fd, char *buffer, char **save)
 {
     int i = 0;
-    int size = read(fd, buffer, (int)READ_SIZE);
+    int size = -1;
 
     free(*save);
     *save = NULL;
+    if (buffer != NULL)
+        size = read(fd, buffer, (int)READ_SIZE);
     if (size <= 0)
         return (0);
     buffer[size] = '\0';
@@ -88,7 +90,7 @@ char *get_next_line(int fd)
         return (line);
     }
     buffer = malloc(sizeof(char) * (abs((int)READ_SIZE) + 1));
-    while (fd >= 0 && READ_SIZE > 0 && read_status == 1) {
+    while (fd >= 0 && (int)READ_SIZE > 0 && read_status == 1) {
         read_status = read_file(fd, buffer, &save);
         if (read_status != 0 && !my_strcat(&line, buffer, '\n'))
             break;
